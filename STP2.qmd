@@ -1,5 +1,5 @@
 ---
-title: "Empowering Girls in STEM: The Role of Female Representation in Shaping Children's Structural Reasoning About Gender Disparities"
+title: "Can Structural Information Shape Children’s Reasoning About Gender Disparities in STEM Achievements?"
 shorttitle: "GENDER REPRESENTATION IN STEM"
 author:
   - name: Liz Kim
@@ -25,8 +25,8 @@ author-note:
     financial-support: ~
     gratitude: ~
     authorship-agreements: ~
-abstract: "Gender bias in STEM educational materials remains a significant barrier to gender equity, with textbooks and online resources often underrepresenting female scientists. This study examines whether children recognize the lack of female scientists as a structural barrier in STEM by presenting them with two hypothetical competition scenarios: robot-building and puzzle-solving. In the robot-building scenario, 96 children aged 5–8 were randomly assigned to one of three conditions varying the representation of male and female scientists in textbooks. Open- and closed-ended questions assessed their reasoning about gender disparities, with the puzzle-solving competition serving as a baseline to test generalization. Findings suggest that structural explanations increased and intrinsic explanations decreased in the within condition for open-ended robot-building responses. However, a similar pattern was observed for the other conditions, although generalization across domains and closed-ended responses was not significant."
-keywords: [Gender Bias in STEM, Structural Reasoning, Educational Materials]
+abstract: "Gender bias in STEM is often subtly embedded in educational materials, which is a structural barrier for girls that contributes to broader gender disparities in STEM. This study examined whether presenting children with structural information—the gender representation of scientists in STEM materials and the corresponding gender differences among STEM competition winners—influences their reasoning about gender disparities in STEM achievement. Children were randomly assigned to one of the three conditions: a baseline condition (no gender information about the scientists in the textbook and boys won), a between-group comparison condition (male scientists in the textbook and boys won), or a within-group comparison condition (boys won when scientists were male, and girls won when scientists were female). After viewing the stimuli, children completed open-ended and explanation rating tasks in two STEM domains: robot-building (original) and puzzle-solving (generalization). Both experimental conditions shifted children’s reasoning away from intrinsic and toward structural explanations in the original domain. We also found some evidence of generalization. These findings suggest that even brief exposure to structural information—particularly through within-group comparison condition—can effectively promote structural reasoning in young children."
+keywords: [structural reasoning, gender representation, STEM education, structural barriers, early childhood]
 bibliography: bibliography.bib
 format:
   apaquarto-docx: default
@@ -105,6 +105,7 @@ table(data$Condition)
 
 ```
 
+## Robot Building Open-ended Questions
 
 ```{r}
 #| label: Open-Ended-Robot
@@ -144,8 +145,7 @@ ggplot(table, aes(fill = Explanation_Type, y = value, x = Condition)) +
 # robot - Chi Square
 chisq.test(data$Condition, data$robot_OE_cat)
 cramerV(data$Condition, data$robot_OE_cat)
-```
-```{r}
+
 # robot - data cleaning for logistic regression
 data$robot.open.struc = 0
 data$robot.open.struc[data$robot_OE_cat == "structural"] = 1
@@ -164,7 +164,6 @@ logistic.struc <- glm(robot.open.struc ~ Condition*AgeYears*Gender, data = data,
 summary(logistic.struc)
 ```
 
-
 ```{r}
 #compared to baseline
 data$Condition <- factor(data$Condition, levels = c("Baseline","Between", "Within"))
@@ -173,8 +172,6 @@ summary(logistic.struc)
 exp(logistic.struc$coefficients['ConditionBetween']) #odds ratio
 exp(logistic.struc$coefficients['ConditionWithin']) #odds ratio
 ```
-report value of : estimate, std. error, p value
-baseline vs between & baseline vs within = both significant 
 
 ```{r}
 #within compared to between
@@ -182,7 +179,6 @@ data$Condition <- factor(data$Condition, levels = c("Between", "Baseline","Withi
 logistic.struc <- glm(robot.open.struc ~ Condition, data = data, family = "binomial")
 summary(logistic.struc)
 ```
-conditionWithin (between vs within): in within, children provide more strucutral explanations
 
 ```{r}
 ## intrinsic
@@ -190,7 +186,6 @@ conditionWithin (between vs within): in within, children provide more strucutral
 logistic.intr <- glm(robot.open.intrnsc ~ Condition*AgeYears*Gender, data = data, family = "binomial")
 summary(logistic.intr)
 ```
-
 
 ```{r}
 # Compared to baseline
@@ -201,7 +196,6 @@ exp(logistic.intr$coefficients['ConditionBetween'])
 exp(logistic.intr$coefficients['ConditionWithin'])  
 ```
 
-
 ```{r}
 # Within compared to Between
 data$Condition <- factor(data$Condition, levels = c("Between", "Baseline", "Within"))
@@ -209,14 +203,12 @@ logistic.intr <- glm(robot.open.intrnsc ~ Condition, data = data, family = "bino
 summary(logistic.intr)
 ```
 
-
 ```{r}
-## other
-#no age or gender effect
+# other
+# no age or gender effect
 logistic.other <- glm(robot.open.other ~ Condition*AgeYears*Gender, data = data, family = "binomial")
 summary(logistic.other)
 ```
-
 
 ```{r}
 #compared to baseline
@@ -226,7 +218,6 @@ summary(logistic.other)
 exp(logistic.other$coefficients['ConditionBetween']) 
 exp(logistic.other$coefficients['ConditionWithin'])
 ```
-
 
 ```{r}
 #within compared to between
@@ -275,7 +266,6 @@ chisq.test(data$Condition, data$puzzle_OE_cat)
 cramerV(data$Condition, data$puzzle_OE_cat)
 ```
 
-
 ```{r}
 # puzzle - data cleaning for logistic regression
 data$puzzle.open.struc = 0
@@ -295,7 +285,6 @@ logistic.struc <- glm(puzzle.open.struc ~ Condition*AgeYears*Gender, data = data
 summary(logistic.struc)
 ```
 
-
 ```{r}
 #compared to baseline
 data$Condition <- factor(data$Condition, levels = c("Baseline","Between", "Within"))
@@ -305,7 +294,6 @@ exp(logistic.struc$coefficients['ConditionBetween']) #odds ratio
 exp(logistic.struc$coefficients['ConditionWithin']) #odds ratio
 ```
 
-
 ```{r}
 #within compared to between
 data$Condition <- factor(data$Condition, levels = c("Between", "Baseline","Within"))
@@ -313,14 +301,12 @@ logistic.struc <- glm(puzzle.open.struc ~ Condition, data = data, family = "bino
 summary(logistic.struc)
 ```
 
-
 ```{r}
 ## intrinsic
 #check there's no age or gender effect
 logistic.intr <- glm(puzzle.open.intrnsc ~ Condition*AgeYears*Gender, data = data, family = "binomial") 
 summary(logistic.intr)
 ```
-
 
 ```{r}
 #compared to baseline
@@ -331,14 +317,12 @@ exp(logistic.intr$coefficients['ConditionBetween']) #odds ratio
 exp(logistic.intr$coefficients['ConditionWithin']) #odds ratio
 ```
 
-
 ```{r}
 #within compared to between
 data$Condition <- factor(data$Condition, levels = c("Between", "Baseline","Within"))
 logistic.intr <- glm(puzzle.open.intrnsc ~ Condition, data = data, family = "binomial")
 summary(logistic.intr)
 ```
-
 
 ```{r}
 ## other
@@ -468,7 +452,6 @@ summary(linear.inter.bw)
 linear.random.bw <- lm(robot_control ~ Condition, data = data)
 summary(linear.random.bw)
 ```
-
 
 ```{r}
 #| label: fig-Bar-graph-robot
@@ -608,11 +591,9 @@ ggplot(df.2.ratings, aes(x = Condition, y = rating, group = explanation, fill = 
 
 ```
 
-
-
+## Comparison across domains: Open-ended
 
 ```{r}
-#Comparison across domains - OE
 ## recoding structural explanation as 1 and intrinsic as 0 (this analysis captures the extent to which children are more likely to provide structural explanations compared to intrinsic explanations)
 data$open[data$category == "structural"] = 1
 data$open[data$category == "intrinsic"] = 0
@@ -645,11 +626,10 @@ exp(logistic.domain$coefficients['trialmath']) #odds ratio
 
 ```
 
-
+## Comparison across domains: Close-ended
 
 ```{r}
-#Comparison across domains - CE
-## 1. structural-interest difference score
+# 1. structural-interest difference score
 data$rating <- data$rate.struc - data$rate.intrnsc.interest
 
 #check age or gender effect
@@ -683,9 +663,11 @@ lme.domain<-lme(rating ~ condition*trial, random = ~ 1 | ID, data=data, na.actio
 summary(lme.domain)
 lme.domain.std<-lme(scale(rating) ~ condition*trial, random = ~ 1 | ID, data=data, na.action=na.exclude, method="ML")
 summary(lme.domain.std)
+```
 
 
-## 2. structural-ability difference score
+```{r}
+# 2. structural-ability difference score
 data$rating <- data$rate.struc - data$rate.intrnsc.ability
 
 #check age or gender effect
